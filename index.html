@@ -13,6 +13,34 @@
       color: white;
       text-align: center;
       overflow: hidden;
+      height: 100vh;
+      position: relative;
+    }
+
+    /* Attractive font for the initial message */
+    .click-message {
+      font-size: 3rem;
+      color: #fff;
+      font-family: 'Arial', sans-serif;
+      font-weight: bold;
+      position: absolute;
+      top: 20%; /* Adjust position above the gift box */
+      left: 50%;
+      transform: translateX(-50%);
+      animation: fadeIn 2s ease-out, pulse 1s infinite alternate;
+      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Fade-in and pulse animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes pulse {
+      0% { transform: translateX(-50%) scale(1); }
+      50% { transform: translateX(-50%) scale(1.1); }
+      100% { transform: translateX(-50%) scale(1); }
     }
 
     h1 {
@@ -60,7 +88,36 @@
       50% { transform: translateY(-20px); }
     }
 
-    /* Floating confetti (particles) */
+    /* Balloon styling */
+    .balloon {
+      position: absolute;
+      bottom: -100px; /* Start balloons below the screen */
+      width: 80px;  /* Larger balloon size */
+      height: 100px;  /* Larger balloon size */
+      border-radius: 50%;
+      animation: floatUp 6s ease-in-out infinite, rotate 3s linear infinite;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Balloon colors */
+    .balloon-1 { background-color: #FF6F61; }
+    .balloon-2 { background-color: #FFD700; }
+    .balloon-3 { background-color: #FF9A9E; }
+    .balloon-4 { background-color: #6A5ACD; }
+    .balloon-5 { background-color: #32CD32; }
+
+    /* Floating balloon animation */
+    @keyframes floatUp {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-100vh); opacity: 0; } /* Move balloons upwards */
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Confetti falling animation */
     .confetti {
       position: fixed;
       width: 10px;
@@ -70,87 +127,76 @@
       border-radius: 50%;
     }
 
-    .confetti.square {
-      border-radius: 0%;
-    }
-
-    /* Balloon styling */
-    .balloon {
-      position: absolute;
-      top: -150px; /* Start from top */
-      width: 60px;
-      height: 80px;
-      border-radius: 50%;
-      animation: floatDown 6s ease-in-out infinite, rotate 3s linear infinite;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Medium-sized balloons */
-    .medium-balloon {
-      width: 80px;
-      height: 100px;
-      animation-duration: 6s;  /* Medium duration */
-    }
-
-    /* Floating confetti (particles) */
-    @keyframes floatDown {
+    @keyframes fall {
       0% { transform: translateY(0); opacity: 1; }
-      100% { transform: translateY(100vh); opacity: 0; }
+      100% { transform: translateY(100vh); opacity: 0; } /* Confetti falls down */
     }
 
-    @keyframes rotate {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    /* Animations */
-    @keyframes zoomIn {
-      from { transform: scale(0.5); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+    /* Gift box styling */
+    .gift-box {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 200px;  /* Larger gift box size */
+      height: 200px;  /* Larger gift box size */
+      background: url('https://i.imgur.com/SWyqAmT.png') no-repeat center center;
+      background-size: contain;
+      cursor: pointer;
+      transition: transform 0.5s;
     }
 
   </style>
 </head>
 <body>
+  <!-- Message to click the gift box -->
+  <div class="click-message">Click the Gift Box to see the magic!</div>
+
+  <!-- Gift Box -->
+  <div class="gift-box"></div>
+
+  <!-- Birthday Message and Photo -->
   <h1>Happy Birthday Srusthi, my cutie!</h1>
-  <img src="https://i.imgur.com/fmQxsi1.png" alt="Srusthi's Photo">
+  <img id="srusthiPhoto" src="https://i.imgur.com/fmQxsi1.png" alt="Srusthi's Photo">
 
   <script>
-    // Add Sound Effect
-    const audio = new Audio('https://www.soundjay.com/button/beep-07.wav');  // Replace with a joyful birthday sound file
-    audio.play();
+    // Function to trigger the event when the gift box is clicked
+    document.querySelector('.gift-box').addEventListener('click', function () {
+      // Hide the gift box and the initial message
+      this.style.display = 'none';
+      document.querySelector('.click-message').style.display = 'none';
 
-    // Create colorful balloons (medium-sized)
-    const balloonColors = ['#FF6F61', '#FFD700', '#FF9A9E', '#6A5ACD', '#32CD32'];  // Array of balloon colors
-    for (let i = 0; i < 10; i++) {
-      const balloon = document.createElement('div');
-      balloon.className = 'balloon medium-balloon';
-      balloon.style.left = Math.random() * 100 + 'vw';
-      balloon.style.backgroundColor = balloonColors[Math.floor(Math.random() * balloonColors.length)];
-      balloon.style.animationDuration = 6 + Math.random() * 4 + 's';  // Adjust the float-down time for medium-sized balloons
-      balloon.style.animationDelay = Math.random() * 5 + 's';
-      document.body.appendChild(balloon);
-    }
+      // Show the birthday message and photo after a very short delay (500 milliseconds)
+      setTimeout(() => {
+        document.querySelector('h1').style.display = 'block';  // Show the birthday message
+        document.querySelector('#srusthiPhoto').style.display = 'block';  // Show Srusthi's photo
+      }, 500); // Short delay (0.5 seconds)
 
-    // Create confetti (particles) effect
-    for (let i = 0; i < 100; i++) {
-      const confetti = document.createElement('div');
-      confetti.className = 'confetti';
-      if (Math.random() > 0.5) {
-        confetti.classList.add('square');  // Add square confetti
+      // Create colorful balloons moving up
+      const balloonColors = ['balloon-1', 'balloon-2', 'balloon-3', 'balloon-4', 'balloon-5'];
+      for (let i = 0; i < 10; i++) {
+        const balloon = document.createElement('div');
+        balloon.className = 'balloon ' + balloonColors[Math.floor(Math.random() * balloonColors.length)];
+        balloon.style.left = Math.random() * 100 + 'vw';  // Random horizontal position
+        balloon.style.animationDuration = 6 + Math.random() * 4 + 's';  // Random animation duration
+        balloon.style.animationDelay = Math.random() * 5 + 's';  // Random animation delay
+        document.body.appendChild(balloon);
       }
-      confetti.style.left = Math.random() * 100 + 'vw';
-      confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 70%)`;
-      confetti.style.animationDuration = 3 + Math.random() * 2 + 's';
-      confetti.style.animationDelay = Math.random() * 4 + 's';
-      document.body.appendChild(confetti);
-    }
 
-    // Show the birthday message and photo after a delay
-    setTimeout(() => {
-      document.querySelector('h1').style.display = 'block';
-      document.querySelector('img').style.display = 'block';
-    }, 3000); // Delay to show message and photo after 3 seconds
+      // Create confetti (particles) effect
+      for (let i = 0; i < 100; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        if (Math.random() > 0.5) {
+          confetti.classList.add('square');  // Add square confetti
+        }
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 70%)`;
+        confetti.style.animationDuration = 3 + Math.random() * 2 + 's';
+        confetti.style.animationDelay = Math.random() * 4 + 's';
+        document.body.appendChild(confetti);
+      }
+    });
   </script>
 </body>
 </html>
